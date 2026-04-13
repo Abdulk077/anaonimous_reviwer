@@ -65,3 +65,7 @@ export const deleteComment = async (req, res) => {
     res.status(500).json({ error: "Delete failed" });
   }
 };
+// getting comment by post id not finalyes the rightnow 
+export const getCommentsByPostId = async (req, res) => {
+    
+};
