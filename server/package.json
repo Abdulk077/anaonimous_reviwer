@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "prisma generate",
     "start": "nodemon src/index.js",
+    "admin": "nodemon scripts/createAdmin.js",
     "dev": "nodemon src/index.js"
   },
   "type": "module",
