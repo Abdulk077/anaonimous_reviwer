@@ -18,13 +18,62 @@ enum Role {
   REVIEWER
   ADMIN
 }
-
+// user model
 model User {
   id        String   @id @default(uuid()) 
   email     String   @unique
   password  String
   bio       String?
   role      Role     @default(STUDENT)
+  
+  // --- ADD THESE TWO LINES ---
+  posts     Post[]    // Tells Prisma a user can have multiple posts
+  comments  Comment[] // Tells Prisma a user can have multiple comments
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// model for the post 
+model Post {
+  id          String   @id @default(uuid())
+  title       String?  
+  slug        String   @unique 
+  content     String   @db.Text
+  
+  fileUrl     String?  
+  fileType    String?  
+
+  tags        String[] @default([])
+
+  viewCount   Int      @default(0)
+  published   Boolean  @default(true)
+
+  // Relations
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
+
+  comments    Comment[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([authorId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
+  @@index([authorId])
 }

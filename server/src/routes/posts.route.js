@@ -1,11 +1,12 @@
 import express from "express";
 import {authorize} from "../middleware/auth.middleware.js";
 const router = express.Router();
-
+import { createPost, getPosts, updatePost, deletePost } from "../controller/post.controller.js";
 // Define your post routes here
-router.get("/create-post", authorize("REVIEWER"), async (req, res) => {
-  // Logic to create a post
-  res.status(200).json({ message: "Post created successfully!" });
-});
-
+router.post("/", authorize("STUDENT"),createPost);
+router.put("/:id", authorize("STUDENT"),updatePost);
+router.delete("/:id", authorize("STUDENT"),deletePost);
+// getting posts
+router.get("/", authorize,getPosts);
+//router.get("/:id",authorize, getPostById);
 export default router;
