@@ -27,7 +27,7 @@ export const createPost = async (req, res) => {
                 title,
                 content,
                 slug,
-                tags: processedTags,
+                tags: processedTags || [],
                 fileUrl,
                 fileType,
                 authorId: req.user.userId, // Assuming your auth middleware attaches user to req

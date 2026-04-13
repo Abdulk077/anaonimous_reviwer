@@ -67,5 +67,52 @@ export const deleteComment = async (req, res) => {
 };
 // getting comment by post id not finalyes the rightnow 
 export const getCommentsByPostId = async (req, res) => {
+    try{
+      // getiing path params  for getting postid to fetch comments of that post 
+      // checking the post id is provided or not 
+      const { postId } = req.params.postId;
+      const {page} = parseInt(req.query.page) || 1;
+      const limit =  10;
+      const skip = (page - 1) * limit;
+
+
+      if( !id ){
+        return res.status(400).json({ error: "Post ID is required." });
+      }
+      c
+      const comments = await prisma.comment.findMany({
+        where: { postId: postId },
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        skip: skip
+      });
+      res.status(200).json(comments);
+
+    } catch(error){
+      res.status(500).json({ error: "Failed to fetch comments" });
+    }
+};
+// getting comments by user id 
+export const getCommentsByUserId = async (req, res ) =>{
+  try{
+    const { userId } = req.params.userId;
+    const { page } = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    if( !userId ){
+      return res.status(400).json({ error: "User ID is required." });
+    }
     
+    const comments = await prisma.comment.findMany({  
+      where: { authorId: userId },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip: skip
+    });
+    res.json(comments);
+
+  }catch(error){
+
+  }
+
 };
