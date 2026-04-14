@@ -49,10 +49,12 @@ export const signup = async (req, res) => {
         res.status(500).json({ error: "Internal server error." });
     }
 };
+// we sending the uuid and role after login succes full and send user data later 
 export const login = async (req, res) => {
-    const { email, password } = req.body;
     try {
-        if (!email || !password) {
+        const { email, password } = req.body;
+        // we checking both email and password is provided or not
+        if (!email && !password) {
             return res.status(400).json({ error: "Email and password are required." });
         }
         const user = await prisma.user.findUnique({
@@ -73,7 +75,7 @@ export const login = async (req, res) => {
                 process.env.JWT_SECRET,
                 { expiresIn: "1d" },
             );
-            res.status(200).json({ token });
+            res.status(200).json({  user: { id: user.id, role: user.role } , token });
         } else {
             res.status(401).json({ error: "Invalid credentials" });
         }}
