@@ -1,0 +1,16 @@
+services:
+  anonymous_db:
+    image: postgres:15
+    container_name: anonymous_postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5433:5432" # Changed local port to 5433 to avoid conflict with standard Postgres
+    volumes:
+      - anonymous_pg_data:/var/lib/postgresql/data
+
+volumes:
+  anonymous_pg_data:
