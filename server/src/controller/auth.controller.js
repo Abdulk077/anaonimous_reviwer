@@ -54,7 +54,7 @@ export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         // we checking both email and password is provided or not
-        if (!email && !password) {
+        if (!email || !password) {
             return res.status(400).json({ error: "Email and password are required." });
         }
         const user = await prisma.user.findUnique({

@@ -20,7 +20,7 @@ export const changeUserRole = async (req, res) => {
     const targetUser = await prisma.user.findUnique({
       where: { id: targetUserId },
     });
-    if( newRole == "REVIEWER" && targetUser.role === "REVIEWER"){
+    if( newRole == "REVIEWER" &&  targetUser.role === "REVIEWER"){
       return res.status(409).json({
         error: "Invalid Role Change", 
         message: "The user is already a Reviewer.",

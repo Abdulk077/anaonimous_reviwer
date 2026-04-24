@@ -52,7 +52,10 @@ export const getPosts = async (req, res) => {
                 skip,
                 take: limit,
                 orderBy: { createdAt: "desc" },
-                include: { author: { select: { email: true, bio: true } } }
+                include: { 
+                 //   author: { select: { bio: true } } ,
+                    _count: { select: { comments: true } }
+                }
             }),
             prisma.post.count()
         ]);
@@ -70,7 +73,7 @@ export const updatePost = async (req, res) => {
         const { id } = req.params;
         const { title, content, tags } = req.body;
         // checking all the field which is required 
-        if( !content || !id ){
+        if (!content || !id) {
             return res.status(400).json({ error: "Title and content are required." });
         }
         // Check ownership first
@@ -99,7 +102,7 @@ export const deletePost = async (req, res) => {
     try {
         const { id } = req.params;
         // checking we got the the id or not 
-        if( !id ){
+        if (!id) {
             return res.status(400).json({ error: "Post ID is required." });
         }
         const post = await prisma.post.findUnique({ where: { id } });
@@ -114,20 +117,53 @@ export const deletePost = async (req, res) => {
     }
 };
 // getting post by user id 
-
 export const getPostsByUserId = async (req, res) => {
+  try {
+    // 🟢 FIX: Add curly braces to get the string value, not the whole object
+    const { userId } = req.params;
+
+    // Debugging: This should print a string, not an object
+    console.log("Fetching posts for ID string:", userId);
+
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required." });
+    }
+
+    const posts = await prisma.post.findMany({
+      // Now authorId matches the string correctly
+      where: { authorId: userId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error("Backend Error:", error);
+    res.status(500).json({ error: "Fetching failed" });
+  }
+};
+// get postdeails by post id
+export const getPostDetails = async (req, res) => {
     try {
-        const userId = req.params.userId;   
-        // checking the user id is provided or not
-        if (!userId) {
-            return res.status(400).json({ error: "User ID is required." });
+        const postId = req.params.postId;
+        // checking the post id is provided or not
+        if (!postId) {
+            res.status(400).json({ error: "Post ID is required." });
         }
-        // we create authorid index in the post model
-        const posts = await prisma.post.findMany({
-            where: { authorId: userId },
-            orderBy: { createdAt: "desc" },
+        // get the post details 
+        const post = await prisma.post.findUnique({
+            where: { id: postId },
+            include: {
+                _count: {
+                    select: {
+                        comments: true
+                    }
+                }
+            }
+
         });
-        res.json(posts);
+        res.status(200).json(post);
+
+
     } catch (error) {
         res.status(500).json({ error: "Fetching failed" });
     }

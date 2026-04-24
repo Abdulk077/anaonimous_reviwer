@@ -9,10 +9,11 @@ export const getUserDetails = async (req, res) => {
         if (!userId) {
             return res.status(400).json({ error: "User ID is required." });
         }
+        
         const user = await prisma.user.findUnique({
             where: { id: userId },
             select: {
-                //id: true,
+                id: true,
                 role: true,
                 bio: true,
                 createdAt: true,

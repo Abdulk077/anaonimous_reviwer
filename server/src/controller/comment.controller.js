@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 // --- CREATE COMMENT ---
 export const createComment = async (req, res) => {
   try {
-    const { content, postId } = req.body;
+    const { postId } = req.params;
+    const { content } = req.body;
     // checking the content and postId is provided or not
     if (!content || !postId) {
       return res.status(400).json({ error: "Content and Post ID are required." });
@@ -14,7 +15,7 @@ export const createComment = async (req, res) => {
     const comment = await prisma.comment.create({
       data: {
         content,
-        postId,
+        postId:postId,
         authorId: req.user.userId,
       },
     });
@@ -67,30 +68,32 @@ export const deleteComment = async (req, res) => {
 };
 // getting comment by post id not finalyes the rightnow 
 export const getCommentsByPostId = async (req, res) => {
-    try{
-      // getiing path params  for getting postid to fetch comments of that post 
-      // checking the post id is provided or not 
-      const { postId } = req.params.postId;
-      const {page} = parseInt(req.query.page) || 1;
-      const limit =  10;
-      const skip = (page - 1) * limit;
+  try {
+    // 1. Correct destructuring from req.params
+    const { postId } = req.params;
 
+    // 2. Correct parseInt logic (destructuring results in NaN otherwise)
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
 
-      if( !id ){
-        return res.status(400).json({ error: "Post ID is required." });
-      }
-      c
-      const comments = await prisma.comment.findMany({
-        where: { postId: postId },
-        orderBy: { createdAt: "desc" },
-        take: limit,
-        skip: skip
-      });
-      res.status(200).json(comments);
-
-    } catch(error){
-      res.status(500).json({ error: "Failed to fetch comments" });
+    // 3. Use the variable 'postId' here (you previously used 'id')
+    if (!postId) {
+      return res.status(400).json({ error: "Post ID is required." });
     }
+
+    const comments = await prisma.comment.findMany({
+      where: { postId: postId }, // Ensure your Schema uses String or Int consistently
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      skip: skip,
+    });
+
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error("Backend Error:", error);
+    res.status(500).json({ error: "Failed to fetch comments" });
+  }
 };
 // getting comments by user id 
 export const getCommentsByUserId = async (req, res ) =>{

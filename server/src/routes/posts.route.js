@@ -7,12 +7,15 @@ import {
   updatePost,
   deletePost,
   getPostsByUserId,
+  getPostDetails,
 } from "../controller/post.controller.js";
 // Define your post routes here
 router.post("/", authorize("STUDENT"),createPost);
 router.put("/:id", authorize("STUDENT"),updatePost);
 router.delete("/:id", authorize("STUDENT"),deletePost);
 // getting posts
+// getting post details by postid
+router.get("/:postId", authorize("STUDENT"), getPostDetails);
 router.get("/", authorize("STUDENT"), getPosts);
-router.get("/:userId", authorize("STUDENT"), getPostsByUserId);
+router.get("/user/:userId", authorize("STUDENT"), getPostsByUserId);
 export default router;

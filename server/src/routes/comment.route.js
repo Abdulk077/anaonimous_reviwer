@@ -9,7 +9,7 @@ import {
 } from "../controller/comment.controller.js";
 const router = express.Router();
 
-router.post("/", authorize("REVIEWER"), createComment);
+router.post("/:postId", authorize("REVIEWER"), createComment);
 router.put("/:id", authorize("REVIEWER"), updateComment);
 router.delete("/id", authorize("REVIEWER"), deleteComment);
 // getiing comemnt as per now post id route for that

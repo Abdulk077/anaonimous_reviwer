@@ -7,13 +7,14 @@ import postRouter from "./routes/posts.route.js";
 import commentRouter from "./routes/comment.route.js";
 import adminRouter from "./routes/admin.route.js";
 import userRouter from "./routes/user.route.js";
+import cors from "cors";
 // loading dot env
-
+dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 6000;
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello World!"); 
