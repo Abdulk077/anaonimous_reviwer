@@ -8,14 +8,15 @@ import commentRouter from "./routes/comment.route.js";
 import adminRouter from "./routes/admin.route.js";
 import userRouter from "./routes/user.route.js";
 import cors from "cors";
+//import { rateLimiter } from "./middleware/ratelimiter.middleware.js";
 // loading dot env
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 3000;
 app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
+//app.use(rateLimiter);
 app.get("/", (req, res) => {
   res.send("Hello World!"); 
 });
@@ -24,6 +25,7 @@ app.use("/api/posts", postRouter);
 app.use("/api/comments", commentRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/users", userRouter);
+
 app.listen(PORT, async() => {
   await connectDB();
   console.log(`Server is running on port ${PORT}`);

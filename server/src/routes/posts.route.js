@@ -16,6 +16,6 @@ router.delete("/:id", authorize("STUDENT"),deletePost);
 // getting posts
 // getting post details by postid
 router.get("/:postId", authorize("STUDENT"), getPostDetails);
-router.get("/", authorize("STUDENT"), getPosts);
+router.get("/", getPosts);
 router.get("/user/:userId", authorize("STUDENT"), getPostsByUserId);
 export default router;

@@ -91,3 +91,28 @@ JWT: Signed with a JWT_SECRET to ensure token payloads cannot be manipulated by 
 Indexing: @@index([postId]) and @@index([authorId]) are used to ensure constant-time lookups even as the dataset grows.
 
 Selective Fetching: The API uses Prisma's .select() to return only necessary fields, reducing payload size and increasing response speed.
+
+## 🛠️ Reference: Transitioning from Direct Connection to PgBouncer
+
+When scaling up to use connection pooling, Prisma needs to split its connection strategy. Below is the step-by-step reference of what changed from the original direct connection setup.
+
+### Step 1: Update the Prisma Schema
+Originally, the schema only had a single `url` pointer. To prevent migrations from failing through PgBouncer's transaction mode, we added the `directUrl` parameter.
+
+**File:** `prisma/schema.prisma`
+```prisma
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")   // Now routes to PgBouncer
+  directUrl = env("DIRECT_URL")     // Now routes directly to Postgres (for migrations)
+}
+# ❌ OLD DIRECT CONNECTION (Reference Only)
+# DATABASE_URL="postgresql://root:password@127.0.0.1:5433/mydb"
+
+#  NEW PGBOUNCER CONNECTION (For Application Traffic)
+# Points to PgBouncer port (6432), uses PgBouncer virtual user/db, and appends the pgbouncer flag
+DATABASE_URL="postgresql://user_anon:${DB_PASS}@127.0.0.1:6432/anonymous_app_db?pgbouncer=true"
+
+#  NEW DIRECT CONNECTION (For Prisma Migrations Only)
+# Points directly to Postgres port (5433) and uses the actual database credentials
+DIRECT_URL="postgresql://${DB_USER}:${DB_PASS}@127.0.0.1:5433/${DB_NAME}"
