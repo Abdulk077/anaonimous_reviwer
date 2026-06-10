@@ -5,7 +5,7 @@ export const options = {
   scenarios: {
     constant_request_rate: {
       executor: "constant-arrival-rate",
-      rate: 200, // Target: Exactly 200 requests per second (Doubled!)
+      rate: 400, // Target: Exactly 200 requests per second (Doubled!)
       timeUnit: "1s",
       duration: "20s",
       preAllocatedVUs: 1000, // Increased to ensure k6 has enough workers
