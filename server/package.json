@@ -4,15 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "prisma generate",
-    "start": "nodemon src/index.js",
-    "admin": "nodemon scripts/createAdmin.js",
-    "dev": "nodemon src/index.js"
+    "start": "bun src/index.js",
+    "admin": "bun scripts/createAdmin.js",
+    "dev": "bun src/index.js"
   },
   "type": "module",
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "ISC", 
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "bcrypt": "^6.0.0",
