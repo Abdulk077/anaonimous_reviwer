@@ -60,6 +60,7 @@ model Post {
   updatedAt   DateTime @updatedAt
 
   @@index([authorId])
+  @@index([published, createdAt(sort: Desc)])
 }
 
 model Comment {

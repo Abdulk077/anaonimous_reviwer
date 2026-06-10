@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.3",
     "nanoid": "^5.1.7",
     "nodemailer": "^8.0.5",
+    "pm2": "^7.0.1",
     "slugify": "^1.6.9"
   },
   "devDependencies": {

@@ -2,11 +2,18 @@ import http from "k6/http";
 import { sleep } from "k6";
 
 export const options = {
-  vus: 10,
-  iterations: 300,
-  duration: "30s",
+  scenarios: {
+    constant_request_rate: {
+      executor: "constant-arrival-rate",
+      rate: 200, // Target: Exactly 200 requests per second (Doubled!)
+      timeUnit: "1s",
+      duration: "20s",
+      preAllocatedVUs: 1000, // Increased to ensure k6 has enough workers
+      maxVUs: 1000,
+    },
+  },
 };
+
 export default function () {
-  http.get("http://localhost:3000/api/posts/");
-  sleep(1);
+  http.get("http://127.0.0.1:3000/api/posts/");
 }

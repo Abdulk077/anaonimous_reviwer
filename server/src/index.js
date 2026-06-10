@@ -8,6 +8,7 @@ import commentRouter from "./routes/comment.route.js";
 import adminRouter from "./routes/admin.route.js";
 import userRouter from "./routes/user.route.js";
 import cors from "cors";
+import pm2 from "pm2";
 //import { rateLimiter } from "./middleware/ratelimiter.middleware.js";
 // loading dot env
 dotenv.config();

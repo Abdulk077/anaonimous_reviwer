@@ -49,15 +49,15 @@ export const getPosts = async (req, res) => {
 
         const [posts, total] = await prisma.$transaction([
             prisma.post.findMany({
-                skip,
+                skip:skip,
                 take: limit,
+                where: { published: true },
                 orderBy: { createdAt: "desc" },
                 include: { 
                  //   author: { select: { bio: true } } ,
                     _count: { select: { comments: true } }
                 }
             }),
-            prisma.post.count()
         ]);
 
         res.json({ posts, total, pages: Math.ceil(total / limit) });
