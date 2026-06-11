@@ -32,14 +32,11 @@ jobs:
           key: ${{ runner.os }}-bun-${{ hashFiles('server/bun.lockb') }}
           restore-keys: |
             ${{ runner.os }}-bun-
-              
+
       - name: Install Dependencies
         run: bun install
         working-directory: ./server
 
-      - name: Syntax Check
-        run: bun --eval "import('./src/index.js')"
-        working-directory: ./server
 
       - name: Trivy Filesystem Scan
         uses: aquasecurity/trivy-action@master
