@@ -30,7 +30,7 @@ jobs:
         working-directory: ./server
 
       - name: Syntax Check
-        run: bun build src/index.js --target=node
+        run: bun --eval "import('./src/index.js')"
         working-directory: ./server
 
       - name: Trivy Filesystem Scan
