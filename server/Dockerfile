@@ -26,7 +26,8 @@ ENV NODE_ENV=production
 USER bun
 
 # Change this to whichever port your index.js listens on
-EXPOSE 3000
+ENV PORT=3000
+EXPOSE $PORT
 
 # Run the app
 ENTRYPOINT [ "bun", "run", "src/index.js" ]
