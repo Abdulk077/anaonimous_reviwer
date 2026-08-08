@@ -17,6 +17,7 @@ FROM base AS release
 COPY --from=dependencies /app/node_modules ./node_modules
 # Copy your source folder and files
 COPY src ./src
+COPY prisma ./prisma
 COPY package.json ./
 
 # Set environment to production

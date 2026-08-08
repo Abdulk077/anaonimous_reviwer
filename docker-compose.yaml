@@ -1,11 +1,4 @@
 services:
-  app:
-    image: abdulk07/annon:v1  # or use build: . to build from Dockerfile
-    ports:
-      - "8000:3000"
-    env_file:
-      - .env
-
   anonymous_db:
     image: postgres:15
     container_name: anonymous_postgres_container
