@@ -1,10 +1,15 @@
-import { PrismaClient } from "@prisma/client";
+
+import prisma, { prismaRead } from "../config/db.config.js";
+// Read query
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 //loading dot env
 dotenv.config();
-const prisma = new PrismaClient();
+const posts = await prismaRead.post.findMany();
+// Write query  
+const post = await prisma.post.create({...});
+
 
 export const signup = async (req, res) => {
     const { email, password } = req.body;
@@ -57,7 +62,7 @@ export const login = async (req, res) => {
         if (!email || !password) {
             return res.status(400).json({ error: "Email and password are required." });
         }
-        const user = await prisma.user.findUnique({
+        const user = await prismaRead.user.findUnique({
             where: { email: email.toLowerCase() },
         });
         if (!user) return res.status(401).json({ error: "Invalid credentials" });

@@ -1,5 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma, { prismaRead } from "../config/db.config.js";
+// Read query
+const posts = await prismaRead.post.findMany();
+// Write query  
+const post = await prisma.post.create({...});
+
 import { sendReviewerApplicationEmail } from "../config/mail.config.js";
 export const getUserDetails = async (req, res) => {
     try {
@@ -8,7 +12,7 @@ export const getUserDetails = async (req, res) => {
             return res.status(400).json({ error: "User ID is required." });
         }
 
-        const user = await prisma.user.findUnique({
+        const user = await prismaRead.user.findUnique({
             where: { id: userId },
             select: {
                 id: true,
@@ -36,7 +40,7 @@ export const submitReviewerApplication = async (req, res) => {
     try {
         const { userId, answers } = req.body;
 
-        const user = await prisma.user.findUnique({
+        const user = await prismaRead.user.findUnique({
             where: { id: userId },
         });
 

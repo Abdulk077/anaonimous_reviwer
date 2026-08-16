@@ -1,8 +1,14 @@
-import { PrismaClient } from "@prisma/client";
-import slugify from "slugify";
-import { nanoid } from "nanoid";
+import prisma, { prismaRead } from "../config/db.config.js";
+// Read query
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+//loading dot env
+dotenv.config();
+const posts = await prismaRead.post.findMany();
+// Write query  
+const post = await prisma.post.create({...});
 
-const prisma = new PrismaClient();
 
 // --- CREATE POST ---
 export const createPost = async (req, res) => {
@@ -47,7 +53,7 @@ export const getPosts = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const [posts, total] = await prisma.$transaction([
+        const [posts, total] = await prismaRead.$transaction([
             prisma.post.findMany({
                 skip:skip,
                 take: limit,
@@ -77,7 +83,7 @@ export const updatePost = async (req, res) => {
             return res.status(400).json({ error: "Title and content are required." });
         }
         // Check ownership first
-        const post = await prisma.post.findUnique({ where: { id } });
+        const post = await prismaRead.post.findUnique({ where: { id } });
         if (!post || post.authorId !== req.user.id) {
             return res.status(403).json({ error: "Unauthorized or post not found" });
         }
@@ -129,7 +135,7 @@ export const getPostsByUserId = async (req, res) => {
       return res.status(400).json({ error: "User ID is required." });
     }
 
-    const posts = await prisma.post.findMany({
+    const posts = await prismaRead.post.findMany({
       // Now authorId matches the string correctly
       where: { authorId: userId },
       orderBy: { createdAt: "desc" },
@@ -150,7 +156,7 @@ export const getPostDetails = async (req, res) => {
             res.status(400).json({ error: "Post ID is required." });
         }
         // get the post details 
-        const post = await prisma.post.findUnique({
+        const post = await prismaRead.post.findUnique({
             where: { id: postId },
             include: {
                 _count: {

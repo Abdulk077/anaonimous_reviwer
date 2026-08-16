@@ -1,8 +1,15 @@
+import prisma, { prismaRead } from "../config/db.config.js";
+// Read query
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+//loading dot env
+dotenv.config();
+const posts = await prismaRead.post.findMany();
+// Write query  
+const post = await prisma.post.create({...});
 
 
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
 // --- CREATE COMMENT ---
 export const createComment = async (req, res) => {
   try {
@@ -34,7 +41,7 @@ export const updateComment = async (req, res) => {
     if( !content || !id ){
         return res.status(400).json({ error: "Content and Comment ID are required." });
     }
-    const comment = await prisma.comment.findUnique({ where: { id } });
+    const comment = await prismaRead.comment.findUnique({ where: { id } });
     if (!comment || comment.authorId !== req.user.userId) {
       return res.status(403).json({ error: "Unauthorized" });
     }
@@ -53,7 +60,7 @@ export const updateComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const { id } = req.params;
-    const comment = await prisma.comment.findUnique({ where: { id } });
+    const comment = await prismaRead.comment.findUnique({ where: { id } });
 
     // Allow Author OR Admin to delete
     if (!comment || (comment.authorId !== req.user.userId && req.user.role !== "ADMIN")) {
@@ -82,7 +89,7 @@ export const getCommentsByPostId = async (req, res) => {
       return res.status(400).json({ error: "Post ID is required." });
     }
 
-    const comments = await prisma.comment.findMany({
+    const comments = await prismaRead.comment.findMany({
       where: { postId: postId }, // Ensure your Schema uses String or Int consistently
       orderBy: { createdAt: "desc" },
       take: limit,
@@ -106,7 +113,7 @@ export const getCommentsByUserId = async (req, res ) =>{
       return res.status(400).json({ error: "User ID is required." });
     }
     
-    const comments = await prisma.comment.findMany({  
+    const comments = await prismaRead.comment.findMany({  
       where: { authorId: userId },
       orderBy: { createdAt: 'desc' },
       take: limit,
