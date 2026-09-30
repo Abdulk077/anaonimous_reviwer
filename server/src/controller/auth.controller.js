@@ -1,15 +1,11 @@
 
 import prisma, { prismaRead } from "../config/db.config.js";
-// Read query
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-//loading dot env
-dotenv.config();
-const posts = await prismaRead.post.findMany();
-// Write query  
-const post = await prisma.post.create({...});
 
+// Write query
+
+// Read query
 
 export const signup = async (req, res) => {
     const { email, password } = req.body;

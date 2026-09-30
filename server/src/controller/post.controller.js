@@ -5,9 +5,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 //loading dot env
 dotenv.config();
-const posts = await prismaRead.post.findMany();
 // Write query  
-const post = await prisma.post.create({...});
 
 
 // --- CREATE POST ---

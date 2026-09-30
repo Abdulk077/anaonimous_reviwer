@@ -1,8 +1,4 @@
 import prisma, { prismaRead } from "../config/db.config.js";
-// Read query
-const posts = await prismaRead.post.findMany();
-// Write query  
-const post = await prisma.post.create({...});
 
 import { sendReviewerApplicationEmail } from "../config/mail.config.js";
 export const getUserDetails = async (req, res) => {
